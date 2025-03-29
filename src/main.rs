@@ -13,28 +13,47 @@ use tera::{Tera, Context as TeraContext};
 use serde::Serialize;
 
 
-/// CLI引数定義 (変更なし)
+/// CLI arguments definition
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct CliArgs {
+    /// Root directory path to analyze
     #[arg()]
     root_path: PathBuf,
+    
+    /// Optional query to include in the prompt
     #[arg(long, short='q')]
     query: Option<String>,
+    
+    /// System prompt template to use (only displayed when a query is specified)
     #[arg(long, short='s', default_value = "熟練のITエンジニアとして、コンテキスト情報のみから以下の質問に回答してください。追加で必要な情報があれば適宜質問してください。")]
     system_prompt: String,
+    
+    /// Number of lines to display from the beginning of each file (0 for all lines)
     #[arg(long, short='n', default_value_t = 200)]
     head_lines: usize,
+    
+    /// Apply filters to the directory tree display
     #[arg(long, action = clap::ArgAction::SetTrue)]
     filter_tree: bool,
+    
+    /// File extensions to include (e.g., 'py', 'js')
     #[arg(long, value_name = "EXT", action = clap::ArgAction::Append)]
     include_ext: Vec<String>,
+    
+    /// File extensions to exclude
     #[arg(long, value_name = "EXT", action = clap::ArgAction::Append)]
     exclude_ext: Vec<String>,
+    
+    /// Path patterns to include (regex)
     #[arg(long, value_name = "REGEX", action = clap::ArgAction::Append)]
     include_path: Vec<String>,
+    
+    /// Path patterns to exclude (regex)
     #[arg(long, value_name = "REGEX", action = clap::ArgAction::Append)]
     exclude_path: Vec<String>,
+    
+    /// Don't respect .gitignore files
     #[arg(long, action = clap::ArgAction::SetTrue)]
     include_gitignore: bool,
 }
