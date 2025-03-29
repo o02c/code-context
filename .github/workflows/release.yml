@@ -19,10 +19,6 @@ jobs:
             artifact_name: prompt_context_builder
             asset_name: prompt_context_builder-linux-amd64
             target: x86_64-unknown-linux-gnu
-          - os: ubuntu-latest
-            artifact_name: prompt_context_builder
-            asset_name: prompt_context_builder-linux-arm64
-            target: aarch64-unknown-linux-gnu
           - os: windows-latest
             artifact_name: prompt_context_builder.exe
             asset_name: prompt_context_builder-windows-amd64.exe
@@ -78,18 +74,16 @@ jobs:
         run: |
           mkdir -p release
           cp artifacts/prompt_context_builder-linux-amd64/prompt_context_builder release/prompt_context_builder-linux-amd64
-          cp artifacts/prompt_context_builder-linux-arm64/prompt_context_builder release/prompt_context_builder-linux-arm64
           cp artifacts/prompt_context_builder-windows-amd64.exe/prompt_context_builder.exe release/prompt_context_builder-windows-amd64.exe
           cp artifacts/prompt_context_builder-macos-x86_64/prompt_context_builder release/prompt_context_builder-macos-x86_64
           cp artifacts/prompt_context_builder-macos-arm64/prompt_context_builder release/prompt_context_builder-macos-arm64
-          chmod +x release/prompt_context_builder-linux-amd64 release/prompt_context_builder-linux-arm64 release/prompt_context_builder-macos-x86_64 release/prompt_context_builder-macos-arm64
+          chmod +x release/prompt_context_builder-linux-amd64 release/prompt_context_builder-macos-x86_64 release/prompt_context_builder-macos-arm64
 
       - name: リリースの作成
         uses: softprops/action-gh-release@v1
         with:
           files: |
             release/prompt_context_builder-linux-amd64
-            release/prompt_context_builder-linux-arm64
             release/prompt_context_builder-windows-amd64.exe
             release/prompt_context_builder-macos-x86_64
             release/prompt_context_builder-macos-arm64
