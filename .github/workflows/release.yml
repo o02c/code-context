@@ -5,6 +5,9 @@ on:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'  # 数字.数字.数字形式のタグに反応
 
+permissions:
+  contents: write  # リリース作成に必要な権限を追加
+
 jobs:
   build:
     name: ${{ matrix.os }}向けビルド
@@ -42,6 +45,7 @@ jobs:
           name: ${{ matrix.asset_name }}
           path: target/release/${{ matrix.artifact_name }}
           if-no-files-found: error
+          retention-days: 1
 
   release:
     name: リリースの作成
@@ -50,13 +54,24 @@ jobs:
     steps:
       - name: 成果物をダウンロード
         uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: ファイルの準備
+        run: |
+          mkdir -p release
+          cp artifacts/prompt_context_builder-linux-amd64/prompt_context_builder release/
+          cp artifacts/prompt_context_builder-windows-amd64.exe/prompt_context_builder.exe release/
+          cd release
+          mv prompt_context_builder prompt_context_builder-linux-amd64
+          mv prompt_context_builder.exe prompt_context_builder-windows-amd64.exe
 
       - name: リリースの作成
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            prompt_context_builder-linux-amd64
-            prompt_context_builder-windows-amd64.exe
+            release/prompt_context_builder-linux-amd64
+            release/prompt_context_builder-windows-amd64.exe
           draft: false
           prerelease: false
         env:
