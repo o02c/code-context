@@ -37,7 +37,7 @@ jobs:
           args: --release
 
       - name: 成果物をアップロード
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.asset_name }}
           path: target/release/${{ matrix.artifact_name }}
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 成果物をダウンロード
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: リリースの作成
         uses: softprops/action-gh-release@v1
