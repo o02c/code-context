@@ -1,0 +1,18 @@
+[package]
+name = "prompt_context_builder"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+ignore = "0.4"
+regex = "1.10"
+anyhow = "1.0"
+# ★追加: Tree表示用
+ascii_tree = "0.1.1" # 利用可能な最新バージョンに修正
+# ★追加: テンプレートエンジン用
+tera = "1"
+# ★追加: TeraのContext用 (serde)
+serde = { version = "1.0", features = ["derive"] }
+# 標準ライブラリに含まれるものは不要（例: BTreeMap）
+# std::collections::BTreeMap は標準ライブラリ

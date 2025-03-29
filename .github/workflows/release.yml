@@ -1,0 +1,63 @@
+name: リリースビルド
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'  # 数字.数字.数字形式のタグに反応
+
+jobs:
+  build:
+    name: ${{ matrix.os }}向けビルド
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: prompt_context_builder
+            asset_name: prompt_context_builder-linux-amd64
+          - os: windows-latest
+            artifact_name: prompt_context_builder.exe
+            asset_name: prompt_context_builder-windows-amd64.exe
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Rustツールチェーンのセットアップ
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: リリースビルド
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+
+      - name: 成果物をアップロード
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.asset_name }}
+          path: target/release/${{ matrix.artifact_name }}
+          if-no-files-found: error
+
+  release:
+    name: リリースの作成
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 成果物をダウンロード
+        uses: actions/download-artifact@v3
+
+      - name: リリースの作成
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            prompt_context_builder-linux-amd64
+            prompt_context_builder-windows-amd64.exe
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
