@@ -215,6 +215,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
 
 [[package]]
+name = "code_context"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "ascii_tree",
+ "clap",
+ "ignore",
+ "regex",
+ "serde",
+ "tera",
+]
+
+[[package]]
 name = "colorchoice"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -567,19 +580,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a31971752e70b8b2686d7e46ec17fb38dad4051d94024c88df49b667caea9c84"
 dependencies = [
  "unicode-ident",
-]
-
-[[package]]
-name = "prompt_context_builder"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "ascii_tree",
- "clap",
- "ignore",
- "regex",
- "serde",
- "tera",
 ]
 
 [[package]]
